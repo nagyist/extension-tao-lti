@@ -134,7 +134,7 @@ class Lti1p3RegistrationSnapshotRepository implements RegistrationRepositoryInte
     {
         $rows = $this->getPersistence()
             ->query('SELECT * FROM lti_platform_registration')
-            ->fetchAll();
+            ->fetchAllAssociative();
 
         return array_map(
             function (array $row) {
@@ -200,7 +200,8 @@ class Lti1p3RegistrationSnapshotRepository implements RegistrationRepositoryInte
             $queryParams
         );
 
-        return $statement->fetch() ?: [];
+        $row = $statement->fetchAssociative();
+        return $row !== false ? $row : [];
     }
 
     private function toRegistration(array $row): ?Registration
